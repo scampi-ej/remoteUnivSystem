@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Usefac List</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap" rel="stylesheet">
+<!--		<script type="module" src="assets/js/action.js"></script>-->
+		<script src="assets/lib/xlsx.full.min.js"></script>
+		<!-- Scripts -->
+	</head>
+
+	<body class="is-preload">
+		<div class="modal hidden"></div>
+		<!-- Content -->
+			<div id="content">
+				<div class="inner">
+				
+					<!-- Post -->
+						<article class="box post post-excerpt" id="StandardSection" >
+							<header>
+								<h2>Standard Usefac List</h2>
+								<h3>🍭표준형 기관 리스트</h3>
+							</header>
+
+							<div class="info" 	id="titleStandard">
+								<span class="date">Standard</span>
+							</div>
+
+							<div class="row rows">
+<!--								<div class="row col-1-wide">-->
+<!--									-->
+<!--								</div>-->
+
+<!--								<div class="row col-5-wide">-->
+							</div>
+						</article>
+
+						<article class="box post post-excerpt" id="SaaSSection" style="display:none;">
+							<header>
+								<h2>SaaS Usefac List</h2>
+								<h3>🍰SaaS 기관 리스트</h3>
+							</header>
+							<div class="info" 	id="titleSaaS">
+								<span class="date">SaaS</span>
+							</div>
+							<div class="row rows">
+
+<!--								<div class="row col-4-wide">-->
+<!--									<ul class="saass">-->
+<!--										<li class="icon fa-folder"><a href="http://dev-rndbiz.webcash.co.kr:8200/"       target="_blank">(0)SAAS개발</a></li>-->
+<!--										<li class="icon fa-folder"><a href="http://dev-rndbiz.webcash.co.kr:8199/"       target="_blank">(0)구SAAS개발</a></li>-->
+<!--										<li class='icon fa-folder'><a href='https://sanproject.rndbiz.co.kr/'            target='_blank'>(24)SaaS데모</a></li>-->
+<!--										<li class='icon fa-folder'><a href='https://admin.rndbiz.co.kr/'                 target='_blank'>(25)SaaS어드민</a></li>-->
+
+<!--									</ul>-->
+<!--								</div>-->
+
+							</div>
+						</article>
+
+						<article class="box post post-excerpt" id="EtcSection" style="display:none;">
+							<header>
+								<h2>Etc</h2>
+								<h3>🍔🍕🍟</h3>
+							</header>
+
+																	<!-- input type="button" onclick='funcMenuArr()' style='font-size:30px;'>🍕</input> -->
+							
+							<div class="info" 	id="titleEtc">
+								<span class="date">Etc</span>
+							</div>
+							<div class="row">
+								<div class="row col-4-wide">
+									<ul class="stats">
+									
+										<li>
+										<a href="#" id="btnMenu" name="btnMenu" style='font-size:30px;'>🍕</a> 
+										</li>
+										<li>
+											<p>
+												<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+											</p>
+										</li>
+
+									</ul>
+								</div>
+								<div class="row col-4-wide">
+									<ul class="premiums">
+
+										<li class="icon fa-folder"><a href="http://dev-std.rderp.co.kr:8380/"      target="_blank">(00)표준형개발</a></li>
+										<li class="icon fa-folder"><a href="http://demo.rerp.co.kr:8280/"          target="_blank">(00)표준형데모</a></li>
+										<li class="icon fa-folder"><a href="http://dev-std.rderp.co.kr:8380/Logcaster.jsp?JEX_LOG_ID_=shrimp4277"  target="_blank">(00)표준형로그</a></li>
+										<li class="icon fa-folder"><a href="http://demo.rerp.co.kr:8280/Logcaster.jsp?JEX_LOG_ID_=shrimp4277"  target="_blank">(00)표준형데모로그</a></li>
+										<li class="icon fa-folder"><a href="http://dev-std.rderp.co.kr:8380/system_main.act"  target="_blank">(00)표준형(SYSTEM)</a></li>
+									</ul>
+								</div>
+								<div class="row col-4-wide">
+									<ul class="saass">
+										<li class="icon fa-folder"><a href="http://dev-rndbiz.webcash.co.kr:8200/"       target="_blank">(0)SAAS개발</a></li>
+										<li class="icon fa-folder"><a href="http://dev-rndbiz.webcash.co.kr:8199/"       target="_blank">(0)구SAAS개발</a></li>
+										<li class='icon fa-folder'><a href='https://sanproject.rndbiz.co.kr/'            target='_blank'>(24)SaaS데모</a></li>
+										<li class='icon fa-folder'><a href='https://admin.rndbiz.co.kr/'                 target='_blank'>(25)SaaS어드민</a></li>
+
+									</ul>
+								</div>
+							</div>
+
+						</article>
+				</div>
+			</div>
+
+		<!-- Sidebar -->
+			<div id="sidebar">
+
+					<nav id="nav">
+						<ul>
+							<li class="info">
+								검색
+								<input type="text" id="searchText" placeholder="희희희">
+							</li>
+							<li class="current">
+								<a href="#" id="StandardTab">🤍 표준형</a>
+							</li>
+							<li>
+								<a href="#"	id="SaaSTab">🤍 SaaS</a>
+							</li>
+							<li>
+								<a href="#" id="EtcTab">Etc.</a>
+							</li>
+						</ul>
+						</br></br></br>
+						<ul id="infoUl">
+						</ul>
+					</nav>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/action.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
