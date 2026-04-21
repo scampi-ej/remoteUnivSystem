@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	//엑셀에서 기관리스트 읽어오기
 	(async () => {
-		let response = await fetch("/univTest.xlsx");
+		let response = await fetch("./univTest.xlsx");
 		// let t_xml = await response.text(); // 텍스트 형태로 가져오고
 
 		const buffer = await response.arrayBuffer();
