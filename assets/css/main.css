@@ -3036,3 +3036,26 @@ input, select, textarea {
 			}
 
 	}
+
+/* Etc Section - Log ID Input */
+
+	#EtcSection .log-id-wrap {
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
+		padding-top: 20px;
+	}
+
+	#EtcSection .log-id-label {
+		font-size: 0.8em;
+		color: #333;
+		white-space: nowrap;
+	}
+
+	#EtcSection #logUserId {
+		padding: 0.3em 0.6em;
+		font-size: 0.85em;
+		color: #333;
+		border: 2px inset rgba(0, 0, 0, 0.3);
+		width: 130px;
+	}
