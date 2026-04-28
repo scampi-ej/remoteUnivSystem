@@ -48,6 +48,18 @@ document.addEventListener("DOMContentLoaded", () => {
 	// 	alert("즐겨찾기 추가")
 	// });
 
+	var logUserId = document.getElementById('logUserId');
+
+	function updateLogLinks() {
+		var id = logUserId.value.trim() || 'shrimp4277';
+		document.querySelectorAll('.log-link').forEach(function(link) {
+			link.href = link.dataset.logBase + id;
+		});
+	}
+
+	logUserId.addEventListener('input', updateLogLinks);
+	updateLogLinks();
+
 	searchText.addEventListener('keyup', (e) => {
 		var searchValue = searchText.value;
 
