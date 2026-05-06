@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		var server2 = usefacInfo[arrIdx].SERVER2;
 		var univCd = usefacInfo[arrIdx].UNIV_CD;
 
-		if((e.code == "Enter" || e.code == "NumpadEnter")) {
+		if((e.code == "Enter" || e.code == "NumpadEnter") && !e.isComposing) {
 			window.open(url);
 		}
 
