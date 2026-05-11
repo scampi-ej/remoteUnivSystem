@@ -60,10 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	logUserId.addEventListener('input', updateLogLinks);
 	updateLogLinks();
 
-	searchText.addEventListener('keyup', (e) => {
+	searchText.addEventListener('keydown', (e) => {
 		var searchValue = searchText.value;
 
 		var arrIdx = usefacInfo.findIndex(function(el) { return el.NAME.indexOf(searchValue) > -1 });
+		if(arrIdx < 0) return;
+
 		var gubun = usefacInfo[arrIdx].GUBUN;
 		var name = usefacInfo[arrIdx].NAME;
 		var db = usefacInfo[arrIdx].DB;
