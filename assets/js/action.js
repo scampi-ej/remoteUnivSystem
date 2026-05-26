@@ -204,4 +204,26 @@ function searchTarget(searchValue) {
 	}
 }
 
+(function () {
+	document.addEventListener('mouseover', function (e) {
+		const el = e.target.closest('a');
+		if (!el || !el.classList.contains('twinkle') || el._colorTimer) return;
+		el._origColor = el.style.color;
+		el._hue = 0;
+		el._colorTimer = setInterval(function () {
+			el.style.color = `hsl(${el._hue},90%,50%)`;
+			el._hue = (el._hue + 5) % 360;
+		}, 30);
+	});
+
+	document.addEventListener('mouseout', function (e) {
+		const el = e.target.closest('a');
+		if (!el || !el.classList.contains('twinkle') || !el._colorTimer) return;
+		if (el.contains(e.relatedTarget)) return;
+		clearInterval(el._colorTimer);
+		el._colorTimer = null;
+		el.style.color = el._origColor;
+	});
+})();
+
 
