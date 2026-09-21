@@ -60,11 +60,20 @@ document.addEventListener("DOMContentLoaded", () => {
 	logUserId.addEventListener('input', updateLogLinks);
 	updateLogLinks();
 
-	searchText.addEventListener('keydown', (e) => {
+	markWrappedButtons($("#EtcSection"));
+
+	function runSearch() {
 		var searchValue = searchText.value;
 
 		var arrIdx = usefacInfo.findIndex(function(el) { return el.NAME.indexOf(searchValue) > -1 });
-		if(arrIdx < 0) return;
+
+		var infoUl = $("#infoUl");
+		infoUl.find("li").remove();
+		$(".link-list li.search-match").each(function() {
+			stopSearchRainbow(this);
+		}).removeClass("search-match");
+
+		if(arrIdx < 0 || !!! searchValue || searchValue == "") return null;
 
 		var gubun = usefacInfo[arrIdx].GUBUN;
 		var name = usefacInfo[arrIdx].NAME;
@@ -75,14 +84,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		var server2 = usefacInfo[arrIdx].SERVER2;
 		var univCd = usefacInfo[arrIdx].UNIV_CD;
 
-		if((e.code == "Enter" || e.code == "NumpadEnter") && !e.isComposing) {
-			window.open(url);
+		if(gubun == "SaaS") {
+			SaaSTab.click();
+		} else if(gubun == "Standard") {
+			StandardTab.click();
 		}
-
-		var infoUl = $("#infoUl");
-		infoUl.find("li").remove();
-
-		if(!!! searchValue || searchValue == "") return;
 
 		var liStr = "";
 		liStr += "<li class=\"info\">GUBUN : " + gubun+"</li>";
@@ -97,6 +103,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 		infoUl.append(liStr);
 
+		$(".link-list li").filter(function() { return $(this).data("name") === name; }).each(function() {
+			this.classList.add("search-match");
+			startSearchRainbow(this);
+		});
+
+		return url;
+	}
+
+	searchText.addEventListener('input', () => {
+		runSearch();
+	});
+
+	searchText.addEventListener('keydown', (e) => {
+		if((e.code == "Enter" || e.code == "NumpadEnter") && !e.isComposing) {
+			var url = runSearch();
+			if(url) window.open(url);
+		}
 	});
 
 	//엑셀에서 기관리스트 읽어오기
@@ -120,13 +143,11 @@ const parseXLSX = (univList) => {
 
 		var rowsArea = $("#"+sheetName+"Section").find(".rows");
 
-		var divStr = "<div class=\"row col-4-wide\"><ul class=\""+sheetName+"\">";
-		var liStrObj = ["liStr1", "liStr2", "liStr3", "liStr4", "liStr5"];
-		liStrObj["liStr1"] = divStr;
-		liStrObj["liStr2"] = divStr;
-		liStrObj["liStr3"] = divStr;
-		liStrObj["liStr4"] = divStr;
-		liStrObj["liStr5"] = divStr;
+		var groups = {};
+		var groupServer2 = {};
+		var groupIp1 = {};
+		var groupIp2 = {};
+		var groupOrder = [];
 
 		rows.forEach((row,idx) => {
 			const name		= row['기관명'];
@@ -135,24 +156,27 @@ const parseXLSX = (univList) => {
 			const url		= row['URL'] + "rsysmng_login.act";
 			const server1	= row['SERVER1'];
 			const server2	= row['SERVER2'];
+			const ip1		= row['IP1'];
+			const ip2		= row['IP2'];
 			const univCd	= row['UNIV_CD'];
 			const gubun		= row['구분'];
 
-			var liStr = "<li class=\"icon fa-folder\"><a href=\"" + url + "\" target=\"_blank\">" + name +"</a></li>";
+			var label = name;
+			if(sheetName == "Standard") label = "("+univCd+ ")" + name;
+			else if(sheetName == "SaaS") label = "<span class=\"db-tag\">("+db+ ")</span>" + name;
 
-			if(sheetName == "Standard") {
-				liStr = "<li class=\"icon fa-folder\"><a href=\"" + url + "\" target=\"_blank\">("+univCd+ ")" + name +"</a></li>";
-				var grp = Math.floor((idx)/20)+1;
-				liStrObj["liStr"+grp] += liStr;
-			}else if(sheetName == "SaaS") {
-				switch(server1) {
-					case 1 : liStrObj["liStr1"] += liStr; break;
-					case 3 : liStrObj["liStr2"] += liStr; break;
-					case 5 : liStrObj["liStr3"] += liStr; break;
-					case 7 : liStrObj["liStr5"] += liStr; break;
-					case 9 : liStrObj["liStr4"] += liStr; break;
-				}
+			var safeName = String(name).replace(/"/g, "&quot;");
+			var liStr = "<li data-name=\"" + safeName + "\"><a class=\"icon fa-folder\" href=\"" + url + "\" target=\"_blank\"><span>" + label +"</span></a></li>";
+
+			var groupKey = (sheetName == "SaaS") ? server1 : "all";
+			if(!(groupKey in groups)) {
+				groups[groupKey] = "";
+				groupServer2[groupKey] = server2;
+				groupIp1[groupKey] = ip1;
+				groupIp2[groupKey] = ip2;
+				groupOrder.push(groupKey);
 			}
+			groups[groupKey] += liStr;
 
 			usefacInfo.push({
 				GUBUN:gubun
@@ -168,12 +192,36 @@ const parseXLSX = (univList) => {
 			// if(!! name && name.indexOf(searchValue) > -1) console.log("찾음");
 		});
 
-		var endDiv = "</ul></div>";
+		if(sheetName == "SaaS") {
+			groupOrder.sort(function(a,b){ return a - b; });
 
-		rowsArea.append(liStrObj["liStr1"] + endDiv + liStrObj["liStr2"] + endDiv + liStrObj["liStr3"] + endDiv + liStrObj["liStr4"] + endDiv + liStrObj["liStr5"] + endDiv);
+			var html = "";
+			groupOrder.forEach(function(key) {
+				html += "<div class=\"link-group link-group-full\">";
+				html += "<h4 class=\"link-group-title\">SERVER : " + key + ", " + groupServer2[key] + " | " + groupIp1[key] + ", " + groupIp2[key] + "</h4>";
+				html += "<ul class=\"link-list SaaS\">" + groups[key] + "</ul>";
+				html += "</div>";
+			});
+
+			rowsArea.append(html);
+		} else {
+			rowsArea.append("<ul class=\"link-list "+sheetName+"\">" + groups["all"] + "</ul>");
+		}
+
+		markWrappedButtons(rowsArea);
 	})
 
 };
+
+function markWrappedButtons(scope) {
+	scope.find("li a.icon.fa-folder").each(function() {
+		var label = this.querySelector("span");
+		var lineHeight = parseFloat(getComputedStyle(label).lineHeight);
+		if(label.offsetHeight > lineHeight * 1.5) {
+			this.closest("li").classList.add("is-wrapped");
+		}
+	});
+}
 
 // function addFavorite() {
 // 	var title = "";
@@ -225,5 +273,25 @@ function searchTarget(searchValue) {
 		el.style.color = el._origColor;
 	});
 })();
+
+function startSearchRainbow(li) {
+	var el = li.querySelector('a.icon.fa-folder');
+	if (!el || el._searchColorTimer) return;
+	el._searchHue = 0;
+	el._searchColorTimer = setInterval(function () {
+		el.style.setProperty('--search-match-color', `hsl(${el._searchHue},85%,50%)`);
+		el.style.setProperty('--search-match-shadow', `hsla(${el._searchHue},85%,50%,0.45)`);
+		el._searchHue = (el._searchHue + 5) % 360;
+	}, 30);
+}
+
+function stopSearchRainbow(li) {
+	var el = li.querySelector('a.icon.fa-folder');
+	if (!el || !el._searchColorTimer) return;
+	clearInterval(el._searchColorTimer);
+	el._searchColorTimer = null;
+	el.style.removeProperty('--search-match-color');
+	el.style.removeProperty('--search-match-shadow');
+}
 
 
